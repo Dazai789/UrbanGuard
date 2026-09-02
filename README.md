@@ -38,7 +38,7 @@
 默认生成文件：
 
 - `output/分析报告.json`
-- `output/可视化仪表板.html`
+- `docs/可视化仪表板.html`
 - `docs/仪表板预览.svg`
 
 ## 快速开始

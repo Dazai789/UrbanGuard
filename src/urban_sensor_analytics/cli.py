@@ -33,7 +33,7 @@ def build_parser() -> argparse.ArgumentParser:
     all_jobs = subparsers.add_parser("all", help="执行三阶段分析并生成中文报告和仪表板")
     all_jobs.add_argument("--data-dir", default="data/samples", help="示例数据目录")
     all_jobs.add_argument("--output", default="output/分析报告.json", help="JSON 报告路径")
-    all_jobs.add_argument("--dashboard", default="output/可视化仪表板.html", help="HTML 仪表板路径")
+    all_jobs.add_argument("--dashboard", default="docs/可视化仪表板.html", help="HTML 仪表板路径")
     all_jobs.add_argument("--preview", default="docs/仪表板预览.svg", help="SVG 预览图路径")
     all_jobs.add_argument("--latency-threshold", type=float, default=20.0, help="延迟增幅阈值")
     all_jobs.add_argument("--risk-threshold", type=float, default=2.0, help="空气质量风险阈值")
