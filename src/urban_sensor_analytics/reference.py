@@ -46,16 +46,16 @@ def latency_anomalies(
         if increase > threshold:
             results.append(
                 {
-                    "device_id": device_id,
-                    "date": date,
-                    "daily_average_ms": daily_avg,
-                    "overall_average_ms": overall_avg,
-                    "increase_ms": increase,
+                    "设备编号": device_id,
+                    "日期": date,
+                    "当日平均延迟（毫秒）": daily_avg,
+                    "设备总体平均延迟（毫秒）": overall_avg,
+                    "延迟增幅（毫秒）": increase,
                 }
             )
     return sorted(
         results,
-        key=lambda row: (row["device_id"], -parse_date(str(row["date"])).timestamp()),
+        key=lambda row: (row["设备编号"], -parse_date(str(row["日期"])).timestamp()),
     )
 
 
@@ -73,22 +73,22 @@ def air_quality_risk(
         if any(score >= threshold for score in scores):
             devices[device_id].append(
                 {
-                    "date": date,
-                    "average_risk": sum(scores) / len(scores),
+                    "日期": date,
+                    "平均风险值": sum(scores) / len(scores),
                 }
             )
 
     result = []
     for device_id, risky_dates in devices.items():
-        risky_dates.sort(key=lambda row: parse_date(str(row["date"])))
+        risky_dates.sort(key=lambda row: parse_date(str(row["日期"])))
         result.append(
             {
-                "device_id": device_id,
-                "risky_date_count": len(risky_dates),
-                "dates": risky_dates,
+                "设备编号": device_id,
+                "高风险日期数": len(risky_dates),
+                "高风险日期": risky_dates,
             }
         )
-    return sorted(result, key=lambda row: (-int(row["risky_date_count"]), row["device_id"]))
+    return sorted(result, key=lambda row: (-int(row["高风险日期数"]), row["设备编号"]))
 
 
 def spatial_text_matches(
@@ -109,15 +109,15 @@ def spatial_text_matches(
             if distance <= max_distance and similarity >= min_similarity:
                 results.append(
                     {
-                        "left_id": left.record_id,
-                        "right_id": right.record_id,
-                        "distance": distance,
-                        "jaccard_similarity": similarity,
+                        "监测点编号": left.record_id,
+                        "事件编号": right.record_id,
+                        "空间距离": distance,
+                        "杰卡德相似度": similarity,
                     }
                 )
     return sorted(
         results,
-        key=lambda row: (numeric_id(str(row["left_id"])), numeric_id(str(row["right_id"]))),
+        key=lambda row: (numeric_id(str(row["监测点编号"])), numeric_id(str(row["事件编号"]))),
     )
 
 
@@ -132,13 +132,13 @@ def run_pipeline(
     min_similarity: float,
 ) -> dict[str, object]:
     return {
-        "latency_anomalies": latency_anomalies(
+        "延迟异常": latency_anomalies(
             latency_path.read_text(encoding="utf-8").splitlines(), latency_threshold
         ),
-        "air_quality_risk": air_quality_risk(
+        "空气质量风险": air_quality_risk(
             air_path.read_text(encoding="utf-8").splitlines(), risk_threshold
         ),
-        "spatial_text_matches": spatial_text_matches(
+        "空间文本匹配": spatial_text_matches(
             locations_a_path.read_text(encoding="utf-8").splitlines(),
             locations_b_path.read_text(encoding="utf-8").splitlines(),
             max_distance,
@@ -149,5 +149,6 @@ def run_pipeline(
 
 def write_report(report: dict[str, object], output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
-
+    output_path.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )

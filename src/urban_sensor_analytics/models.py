@@ -56,7 +56,7 @@ def parse_date(value: str) -> datetime:
             return datetime.strptime(value, fmt)
         except ValueError:
             continue
-    raise ValueError(f"unsupported date: {value}")
+    raise ValueError(f"不支持的日期格式：{value}")
 
 
 def parse_timestamp(value: str) -> datetime:
@@ -66,30 +66,30 @@ def parse_timestamp(value: str) -> datetime:
             return datetime.strptime(value, fmt)
         except ValueError:
             continue
-    raise ValueError(f"unsupported timestamp: {value}")
+    raise ValueError(f"不支持的时间戳格式：{value}")
 
 
 def parse_latency(line: str) -> LatencyReading:
     fields = _csv_fields(line)
     if len(fields) != 3:
-        raise ValueError("latency row must have 3 fields")
+        raise ValueError("延迟数据必须包含 3 个字段")
     date, device_id, latency = (field.strip() for field in fields)
     parse_date(date)
     value = float(latency)
     if not device_id or value < 0:
-        raise ValueError("invalid latency row")
+        raise ValueError("延迟数据无效")
     return LatencyReading(date=date, device_id=device_id, latency_ms=value)
 
 
 def parse_air_reading(line: str) -> AirReading:
     fields = _csv_fields(line)
     if len(fields) != 5:
-        raise ValueError("air-quality row must have 5 fields")
+        raise ValueError("空气质量数据必须包含 5 个字段")
     timestamp, device_id, co2, voc, pm25 = (field.strip() for field in fields)
     parsed = parse_timestamp(timestamp)
     values = tuple(float(value) for value in (co2, voc, pm25))
     if not device_id or any(value < 0 for value in values):
-        raise ValueError("invalid air-quality row")
+        raise ValueError("空气质量数据无效")
     return AirReading(
         date=f"{parsed.month}/{parsed.day}/{str(parsed.year)[2:]}",
         sort_date=parsed.replace(hour=0, minute=0, second=0, microsecond=0),
@@ -108,11 +108,11 @@ SPATIAL_PATTERN = re.compile(
 def parse_spatial_record(line: str) -> SpatialRecord:
     match = SPATIAL_PATTERN.match(line)
     if not match:
-        raise ValueError("invalid spatial record")
+        raise ValueError("空间文本记录无效")
     record_id, x, y, raw_terms = match.groups()
     terms = frozenset(term.lower() for term in raw_terms.split() if term)
     if not record_id.strip() or not terms:
-        raise ValueError("spatial record requires an id and at least one term")
+        raise ValueError("空间文本记录必须包含编号和至少一个关键词")
     return SpatialRecord(record_id.strip(), float(x), float(y), terms)
 
 
@@ -121,4 +121,3 @@ def numeric_id(record_id: str) -> tuple[str, int, str]:
     if not match:
         return record_id, -1, record_id
     return match.group(1), int(match.group(2)), record_id
-

@@ -1,4 +1,4 @@
-"""Spark DataFrame implementation of air-quality risk aggregation."""
+"""使用 Spark DataFrame 实现空气质量风险聚合。"""
 
 import sys
 
@@ -32,15 +32,16 @@ def run(input_path, output_path, threshold):
     )
     risky = daily.filter(F.col("maximum_risk") >= threshold)
     result = risky.groupBy("device_id").agg(
-        F.count("date").alias("risky_date_count"),
-        F.sort_array(F.collect_list(F.struct("date", "average_risk"))).alias("dates"),
-    ).orderBy(F.desc("risky_date_count"), "device_id")
+        F.count("date").alias("高风险日期数"),
+        F.sort_array(F.collect_list(F.struct("date", "average_risk"))).alias("高风险日期"),
+    ).select(
+        F.col("device_id").alias("设备编号"), "高风险日期数", "高风险日期"
+    ).orderBy(F.desc("高风险日期数"), "设备编号")
     result.write.mode("overwrite").json(output_path)
     spark.stop()
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        raise SystemExit("usage: spark_risk_dataframe.py INPUT OUTPUT THRESHOLD")
+        raise SystemExit("用法：spark_risk_dataframe.py 输入路径 输出路径 风险阈值")
     run(sys.argv[1], sys.argv[2], sys.argv[3])
-

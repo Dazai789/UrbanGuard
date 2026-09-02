@@ -1,4 +1,4 @@
-"""Spark RDD implementation of air-quality risk aggregation."""
+"""使用 Spark RDD 实现空气质量风险聚合。"""
 
 import json
 import sys
@@ -37,12 +37,12 @@ def run(input_path, output_path, threshold):
         risky.groupByKey()
         .mapValues(lambda dates: sorted(list(dates)))
         .map(lambda row: {
-            "device_id": row[0],
-            "risky_date_count": len(row[1]),
-            "dates": [{"date": date, "average_risk": score} for date, score in row[1]],
+            "设备编号": row[0],
+            "高风险日期数": len(row[1]),
+            "高风险日期": [{"日期": date, "平均风险值": score} for date, score in row[1]],
         })
-        .sortBy(lambda row: (-row["risky_date_count"], row["device_id"]))
-        .map(json.dumps)
+        .sortBy(lambda row: (-row["高风险日期数"], row["设备编号"]))
+        .map(lambda row: json.dumps(row, ensure_ascii=False))
     )
     result.saveAsTextFile(output_path)
     sc.stop()
@@ -50,6 +50,5 @@ def run(input_path, output_path, threshold):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        raise SystemExit("usage: spark_risk_rdd.py INPUT OUTPUT THRESHOLD")
+        raise SystemExit("用法：spark_risk_rdd.py 输入路径 输出路径 风险阈值")
     run(sys.argv[1], sys.argv[2], sys.argv[3])
-

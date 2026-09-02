@@ -1,4 +1,4 @@
-"""MRJob implementation of device/date latency anomaly detection."""
+"""使用 MRJob 实现设备每日延迟异常检测。"""
 
 from collections import defaultdict
 
@@ -49,11 +49,11 @@ class LatencyAnomalyJob(MRJob):
             increase = daily_average - overall_average
             if increase > self.options.threshold:
                 yield None, {
-                    "device_id": device_id,
-                    "date": date,
-                    "daily_average_ms": daily_average,
-                    "overall_average_ms": overall_average,
-                    "increase_ms": increase,
+                    "设备编号": device_id,
+                    "日期": date,
+                    "当日平均延迟（毫秒）": daily_average,
+                    "设备总体平均延迟（毫秒）": overall_average,
+                    "延迟增幅（毫秒）": increase,
                 }
 
     def steps(self):
@@ -62,4 +62,3 @@ class LatencyAnomalyJob(MRJob):
 
 if __name__ == "__main__":
     LatencyAnomalyJob.run()
-

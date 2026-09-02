@@ -1,4 +1,4 @@
-"""Spark RDD spatial-text join for monitoring locations and nearby events."""
+"""使用 Spark RDD 联合匹配监测点与周边事件的空间和文本信息。"""
 
 import json
 import math
@@ -28,10 +28,10 @@ def qualify(pair, max_distance, min_similarity):
     similarity = len(left[3] & right[3]) / len(left[3] | right[3])
     if distance <= max_distance and similarity >= min_similarity:
         return {
-            "left_id": left[0],
-            "right_id": right[0],
-            "distance": distance,
-            "jaccard_similarity": similarity,
+            "监测点编号": left[0],
+            "事件编号": right[0],
+            "空间距离": distance,
+            "杰卡德相似度": similarity,
         }
     return None
 
@@ -45,8 +45,8 @@ def run(input_a, input_b, output_path, max_distance, min_similarity):
         left.cartesian(right)
         .map(lambda pair: qualify(pair, float(max_distance), float(min_similarity)))
         .filter(lambda row: row is not None)
-        .sortBy(lambda row: (row["left_id"], row["right_id"]))
-        .map(json.dumps)
+        .sortBy(lambda row: (row["监测点编号"], row["事件编号"]))
+        .map(lambda row: json.dumps(row, ensure_ascii=False))
     )
     result.saveAsTextFile(output_path)
     sc.stop()
@@ -55,7 +55,6 @@ def run(input_a, input_b, output_path, max_distance, min_similarity):
 if __name__ == "__main__":
     if len(sys.argv) != 6:
         raise SystemExit(
-            "usage: spark_spatial_text_join.py INPUT_A INPUT_B OUTPUT MAX_DISTANCE MIN_SIMILARITY"
+            "用法：spark_spatial_text_join.py 监测点文件 事件文件 输出路径 最大距离 最低相似度"
         )
     run(*sys.argv[1:])
-

@@ -1,4 +1,3 @@
-"""Urban sensor analytics reference and distributed implementations."""
+"""城市环境传感器风险监测系统。"""
 
 __version__ = "1.0.0"
-
