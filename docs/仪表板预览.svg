@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650">
+      <style>text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.t{font-size:30px;font-weight:700}.s{font-size:15px;fill:#64748b}.n{font-size:34px;font-weight:700;fill:#0f766e}.l{font-size:14px}.v{font-size:13px;fill:#475569}</style>
+      <rect width="1200" height="650" rx="28" fill="#f5f7fb"/><text x="55" y="62" class="t">城市环境传感器风险监测仪表板</text><text x="55" y="91" class="s">MapReduce · Spark RDD/DataFrame · 空间文本联合分析</text>
+      <g transform="translate(55 125)"><rect width="250" height="110" rx="18" fill="white"/><text x="24" y="50" class="n">1</text><text x="24" y="82" class="s">延迟异常记录</text></g>
+      <g transform="translate(335 125)"><rect width="250" height="110" rx="18" fill="white"/><text x="24" y="50" class="n">2</text><text x="24" y="82" class="s">高风险设备</text></g>
+      <g transform="translate(615 125)"><rect width="250" height="110" rx="18" fill="white"/><text x="24" y="50" class="n">4</text><text x="24" y="82" class="s">高风险设备日期</text></g>
+      <g transform="translate(895 125)"><rect width="250" height="110" rx="18" fill="white"/><text x="24" y="50" class="n">3</text><text x="24" y="82" class="s">空间文本关联</text></g>
+      <rect x="55" y="270" width="1090" height="320" rx="20" fill="white"/><text x="85" y="315" font-size="21" font-weight="700">延迟异常增幅与空气质量风险概览</text>
+      <text x="85" y="367" class="l">DEV_1 · 2024-01-02</text><rect x="230" y="350" width="310.0" height="23" rx="5" fill="#2563eb" opacity=".88"/><text x="550.0" y="367" class="v">56.7毫秒</text>
+      <text x="635" y="367" class="l">DEV_21</text><rect x="780" y="350" width="260.0" height="23" rx="5" fill="#0f766e" opacity=".88"/><text x="1050.0" y="367" class="v">2.0天</text><text x="635" y="411" class="l">DEV_22</text><rect x="780" y="394" width="260.0" height="23" rx="5" fill="#0f766e" opacity=".88"/><text x="1050.0" y="411" class="v">2.0天</text>
+    </svg>
