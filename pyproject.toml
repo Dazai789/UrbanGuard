@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "urban-environmental-sensor-risk-monitoring-system"
+version = "1.0.0"
+description = "A distributed urban environmental sensor risk monitoring system built with MapReduce and Spark."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Zhongyang Zhou"}]
+dependencies = []
+
+[project.optional-dependencies]
+mapreduce = ["mrjob>=0.7.4"]
+spark = ["pyspark>=3.5,<4"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+sensor-analytics = "urban_sensor_analytics.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
